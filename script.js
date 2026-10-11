@@ -1,27 +1,112 @@
-const searchForm = document.getElementById("city-search");
-const searchResultSection = document.querySelector("search-results");
-const displayForcastSection = document.querySelector("results-display");
-const errorDisplaySection = document.querySelector("error-display");
+// form element
+const searchForm = document.getElementById("search-form");
+// input element
+const searchInput = document.getElementById("city-search");
+// section element for results, forecast and error messages.
+const resultSection = document.querySelector(".search-results");
+const displayForcastSection = document.querySelector(".results-display");
+const errorDisplaySection = document.querySelector(".error-display");
 
-function createResultCards(searchResults) {
+// creates a list of results found when searching
+function createResultCards(searchResults, onSelect) {
   const list = document.createElement("ul");
-  const listItem = document.createElement("li");
-  const resultItemBtn = document.createElement("button");
-  const resultTitle = document.createElement("span");
-  const resultDescription = document.createElement("span");
+  list.classList.add("location-list");
+
+  // Loop through each found place and adds them to the ul
+  searchResults.forEach((place) => {
+    // 1 li per found place
+    const listItem = document.createElement("li");
+
+    const resultItemBtn = document.createElement("button");
+    resultItemBtn.type = "button";
+    resultItemBtn.classList.add("location-card");
+    resultItemBtn.setAttribute("aria-pressed", "false");
+
+    const resultTitle = document.createElement("span");
+    resultTitle.classList.add("location-name");
+    resultTitle.textContent = place.name;
+
+    const resultDescription = document.createElement("span");
+    resultDescription.classList.add("location-region");
+    resultDescription.textContent = [place.admin1, place.country]
+      .filter(Boolean)
+      .join(", ");
+
+    resultItemBtn.addEventListener("click", () => {
+      list.querySelectorAll(".location-card").forEach((btn) => {
+        btn.classList.remove("is-selected");
+        btn.setAttribute("aria-pressed", "false");
+      });
+
+      resultItemBtn.classList.add("is-selected");
+      resultItemBtn.setAttribute("aria-pressed", "true");
+
+      onSelect(place);
+    });
+
+    resultItemBtn.append(resultTitle, resultDescription);
+    listItem.append(resultItemBtn);
+    list.append(listItem);
+  });
+
+  return list;
+}
+
+function renderResults(places) {
+  resultSection.innerHTML = "";
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Choose a location";
+
+  const count = document.createElement("p");
+  count.classList.add("results-count");
+  count.textContent = places.length + " results";
+
+  const header = document.createElement("div");
+  header.classList.add("results-header");
+  header.append(heading, count);
+
+  const list = createResultCards(places, function (place) {
+    //getWeather(place.latitude, place.longitude, place.name);
+  });
+
+  resultSection.append(header, list);
+  resultSection.classList.remove("hidden");
 }
 
 async function getSearchResults(searchInput) {
-  const URL = `https://geocoding-api.open-meteo.com/v1/search?name=${searchInput}&count=5&language=en&format=json`; 
+  const URL = `https://geocoding-api.open-meteo.com/v1/search?name=${searchInput}&count=5&language=en&format=json`;
 
-  const response = await fetch(URL);
+  try {
+    const response = await fetch(URL);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
 
-
-
-  fetch(URL)
-    .then((res) => res.json())
-    .then((data) => console.log("weather data:", data));
+    const result = await response.json();
+    return result.results;
+  } catch (error) {
+    console.error(error.message);
+    return [];
+  }
 }
 
+//getSearchResults("Malmö");
 
-getSearchResults("Malmö");
+searchForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const input = searchInput.value.trim();
+
+  // checks that input is not empty.
+  if (!input) {
+    console.log("search cant be empty");
+  }
+
+  const results = await getSearchResults(input);
+
+  renderResults(results);
+  console.log(results);
+
+  searchForm.reset();
+});

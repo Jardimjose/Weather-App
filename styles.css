@@ -16,9 +16,9 @@ body {
 }
 
 /* TO HIDE THE CARDS WHEN NO JS  */
-/* .hidden {
+.hidden {
   display: none;
-} */
+}
 
 /*---------------------- */
 /* Mobile first < 1024px */
@@ -186,13 +186,19 @@ body {
   color: #64748b;
 }
 
+.location-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .location-card {
   display: block;
   width: 100%;
   margin-bottom: 0.6rem;
   padding: 0.75rem;
   text-align: left;
-  background: white;
+  background: #f3f7fb;
   border: 1px solid #d9e2ec;
   border-radius: 12px;
   cursor: pointer;
@@ -334,5 +340,22 @@ body {
       "search  results"
       "display display"
       "error   error";
+  }
+
+  /* two columns of results instead of one */
+  .location-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  /* name on the left, region on the right */
+  .location-card {
+    margin-bottom: 0;
+    background: #f3f7fb;
+  }
+
+  .location-card:hover {
+    background: #e9eff6;
   }
 }
