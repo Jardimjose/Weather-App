@@ -17,6 +17,7 @@ function createResultCards(searchResults, onSelect) {
     // 1 li per found place
     const listItem = document.createElement("li");
 
+    // create the btn, set the type, add the class for styling and set aria press state
     const resultItemBtn = document.createElement("button");
     resultItemBtn.type = "button";
     resultItemBtn.classList.add("location-card");
@@ -32,6 +33,7 @@ function createResultCards(searchResults, onSelect) {
       .filter(Boolean)
       .join(", ");
 
+    // adds an event listener to each button being made for the found results
     resultItemBtn.addEventListener("click", () => {
       list.querySelectorAll(".location-card").forEach((btn) => {
         btn.classList.remove("is-selected");
@@ -67,6 +69,7 @@ function renderResults(places) {
   header.append(heading, count);
 
   const list = createResultCards(places, function (place) {
+    // fetch the weather for X location when the uses click the button.
     //getWeather(place.latitude, place.longitude, place.name);
   });
 
@@ -90,8 +93,6 @@ async function getSearchResults(searchInput) {
     return [];
   }
 }
-
-//getSearchResults("Malmö");
 
 searchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
