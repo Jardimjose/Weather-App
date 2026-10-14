@@ -15,11 +15,6 @@ body {
   margin: 0px;
 }
 
-/* TO HIDE THE CARDS WHEN NO JS  */
-.hidden {
-  display: none;
-}
-
 /*---------------------- */
 /* Mobile first < 1024px */
 /*---------------------- */
@@ -93,6 +88,8 @@ body {
 
 .results-display {
   grid-area: display;
+  display: grid;
+  gap: 1rem;
 }
 
 .error-display {
@@ -121,11 +118,11 @@ body {
 }
 
 /* Search Section */
-.search-section p {
+/* .search-section p {
   margin-top: 0.5rem;
   font-size: 0.87rem;
   color: #64748b;
-}
+} */
 
 #search-form {
   display: grid;
@@ -165,12 +162,15 @@ body {
   color: #b42318;
   font-size: 0.8rem;
   margin-top: 1rem;
+  text-align: center;
+  font-weight: bold;
 }
 
 .success-text {
   color: #276749;
   font-size: 0.8rem;
   margin-top: 1rem;
+  font-weight: bold;
 }
 
 /* ---------- Location results ---------- */
@@ -224,31 +224,34 @@ body {
   color: #64748b;
 }
 
-/* ---------- Weather ---------- */
-.weather-heading h2 {
-  font-size: 1.2rem;
+/* ---------- Weather section ---------- */
+/* the gap spaces the header and the two cards */
+
+.weather-header h2 {
+  color: #163a56;
 }
 
-.weather-heading p {
-  font-size: 0.8rem;
+.weather-location {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
   color: #64748b;
 }
 
-.current-top {
+.card-header {
+  margin-bottom: 1rem;
+}
+
+.card-header h3 {
+  font-size: 1.2rem;
+  color: #163a56;
+}
+
+/* ---------- Current weather ---------- */
+.current-main {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-}
-
-.current-label {
-  font-size: 0.8rem;
-  color: #64748b;
-}
-
-.current-condition {
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #163a56;
+  align-items: center;
+  gap: 1rem;
 }
 
 .current-temp {
@@ -257,11 +260,23 @@ body {
   line-height: 1.1;
 }
 
+.current-condition {
+  font-weight: bold;
+  color: #163a56;
+}
+
+.weather-icon {
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+  color: #1b5a85;
+}
+
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 
 .stat {
@@ -270,53 +285,77 @@ body {
   border-radius: 12px;
 }
 
-.stat-label {
-  display: block;
+.stat dt {
   font-size: 0.8rem;
   color: #64748b;
 }
 
-.stat-value {
-  display: block;
+.stat dd {
+  margin-top: 0.25rem;
   font-size: 1.1rem;
   font-weight: bold;
 }
 
 /* ---------- Forecast ---------- */
-.forecast h3 {
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
+.forecast-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
 }
 
 .forecast-day {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "date  icon"
+    "cond  range";
   align-items: center;
-  margin-bottom: 0.6rem;
+  gap: 0.25rem 0.75rem;
   padding: 0.75rem;
   background: #f3f7fb;
   border-radius: 12px;
 }
 
-.forecast-date {
+.forecast-day time {
+  grid-area: date;
   font-size: 0.9rem;
   font-weight: bold;
 }
 
-.forecast-desc {
-  display: block;
+.forecast-icon {
+  grid-area: icon;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #1b5a85;
+}
+
+.forecast-condition {
+  grid-area: cond;
   font-size: 0.8rem;
-  font-weight: normal;
   color: #64748b;
 }
 
-.forecast-temps {
+.forecast-range {
+  grid-area: range;
   font-size: 0.9rem;
   color: #64748b;
 }
 
-.forecast-temps strong {
+.forecast-range strong {
   color: #14202e;
+}
+
+.forecast-details {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 1rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid #d9e2ec;
+  font-size: 0.8rem;
+  color: #64748b;
 }
 
 /* ---------- Error card ---------- */
@@ -326,6 +365,10 @@ body {
   font-size: 0.9rem;
 }
 
+/* TO HIDE THE CARDS WHEN NO JS  */
+.hidden {
+  display: none;
+}
 /*---------------------- */
 /* Desktop > 1024px      */
 /*---------------------- */
@@ -340,6 +383,11 @@ body {
       "search  results"
       "display display"
       "error   error";
+  }
+
+  .results-display {
+    display: grid;
+    grid-template-areas: "header header" "weather forecast";
   }
 
   /* two columns of results instead of one */
@@ -357,5 +405,82 @@ body {
 
   .location-card:hover {
     background: #e9eff6;
+  }
+  /* current weather card */
+  .current-weather {
+    grid-area: weather;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .current-main {
+    margin-bottom: 1.25rem;
+  }
+
+  .current-temp {
+    font-size: 4.5rem;
+  }
+
+  .current-condition {
+    font-size: 1.1rem;
+  }
+
+  .weather-header {
+    grid-area: header;
+  }
+
+  /* icon sits in a rounded tile */
+  .weather-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 1.25rem;
+    background: #e9eff6;
+    border-radius: 16px;
+  }
+
+  /* pushes the stat tiles to the bottom of the card */
+  .stats {
+    margin-top: auto;
+  }
+
+  .forecast {
+    grid-area: forecast;
+  }
+
+  /* forecast card: three days in a row */
+  .forecast-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .forecast-day {
+    grid-template-areas:
+      "date  icon"
+      "cond  cond"
+      "range range";
+    gap: 0.25rem 0.5rem;
+    padding: 1rem;
+  }
+
+  .forecast-condition {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* temperatures sit in a white box inside each day */
+  .forecast-range {
+    padding: 0.6rem 0.75rem;
+    background: #ffffff;
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
+
+  .forecast-details {
+    justify-content: space-between;
+  }
+
+  /* TO HIDE THE CARDS WHEN NO JS  */
+  .hidden {
+    display: none;
   }
 }
