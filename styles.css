@@ -387,7 +387,9 @@ body {
 
   .results-display {
     display: grid;
-    grid-template-areas: "header header" "weather forecast";
+    grid-template-areas:
+      "header header"
+      "weather forecast";
   }
 
   /* two columns of results instead of one */

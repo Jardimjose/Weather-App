@@ -50,7 +50,7 @@ function cleanData(data, cityName, country) {
       weatherCode: daily.weather_code[index],
       high: Math.round(daily.temperature_2m_max[index]),
       low: Math.round(daily.temperature_2m_min[index]),
-    })),
+    })).slice(0, 3),
   };
 }
 
@@ -77,7 +77,7 @@ async function getWeather(latitude, longitude, cityName, country) {
 
 /**
  * Takes a weather code and then
- * returns a readable string equivilant 
+ * returns a readable string equivilant
  */
 function getWeatherDescription(code) {
   if (code === 0) return "Clear sky";
@@ -102,7 +102,7 @@ function getWeatherDescription(code) {
 }
 
 /**
- * Takes a date string and then reformats it 
+ * Takes a date string and then reformats it
  * returns a new date string showing the weekday, month and day in short "Mon Nov 14"
  */
 function formatDay(dateString) {
@@ -116,7 +116,7 @@ function formatDay(dateString) {
 
 /**
  * creates a "card" that will display the weather relevant for the current day
- * returns a section parent HTML element "card" with childern 
+ * returns a section parent HTML element "card" with childern
  */
 function createCurrentWeatherCard(weather) {
   const card = document.createElement("section");
@@ -179,7 +179,7 @@ function createCurrentWeatherCard(weather) {
 
 /**
  * creates a "card" that will display the weather forecast several days
- * returns a section parent element "card" with children appened to it. 
+ * returns a section parent element "card" with children appened to it.
  */
 function createForecastCards(weather) {
   const card = document.createElement("section");
@@ -228,7 +228,6 @@ function createForecastCards(weather) {
   return card;
 }
 
-
 function renderForecastResults(weather) {
   displayForcastSection.innerHTML = "";
 
@@ -240,7 +239,7 @@ function renderForecastResults(weather) {
 
   const selectedPlace = document.createElement("p");
   selectedPlace.classList.add("weather-location");
-  selectedPlace.textContent = [weather.city, weather.location].join(", ");
+  selectedPlace.textContent = [weather.city, weather.country].join(", ");
 
   header.append(title, selectedPlace);
 
@@ -319,8 +318,8 @@ function renderSearchResults(places) {
   header.classList.add("results-header");
   header.append(heading, count);
 
+  // Takes the places found and a callback that is called when a select place is chosen.
   const list = createResultCards(places, async function (place) {
-    // fetch the weather for X location when the uses click the button.
     const weather = await getWeather(
       place.latitude,
       place.longitude,
@@ -328,12 +327,14 @@ function renderSearchResults(places) {
       place.country,
     );
     renderForecastResults(weather);
-    console.log(weather);
+    //console.log(weather);
   });
 
   resultSection.append(header, list);
   resultSection.classList.remove("hidden");
 }
+
+
 
 searchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -350,6 +351,7 @@ searchForm.addEventListener("submit", async (event) => {
     validationDisplay.innerText = "Please enter a location to search.";
     validationDisplay.classList.add("error-text");
     resultSection.classList.add("hidden");
+    return;
   }
 
   // if results found, show success message.
