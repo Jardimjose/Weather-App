@@ -23,10 +23,11 @@ async function getSearchResults(searchInput) {
     }
 
     const result = await response.json();
-    return result.results;
+    // return the results if found, or an empty array if input was not valid.
+    return result.results || [];
   } catch (error) {
     console.error(error.message);
-    return [];
+    return null; // return null if there was a network error
   }
 }
 
@@ -45,12 +46,14 @@ function cleanData(data, cityName, country) {
     wind: Math.round(current.wind_speed_10m),
     weatherCode: current.weather_code,
 
-    forecast: daily.time.map((date, index) => ({
-      date: date,
-      weatherCode: daily.weather_code[index],
-      high: Math.round(daily.temperature_2m_max[index]),
-      low: Math.round(daily.temperature_2m_min[index]),
-    })).slice(0, 3),
+    forecast: daily.time
+      .map((date, index) => ({
+        date: date,
+        weatherCode: daily.weather_code[index],
+        high: Math.round(daily.temperature_2m_max[index]),
+        low: Math.round(daily.temperature_2m_min[index]),
+      }))
+      .slice(0, 3),
   };
 }
 
@@ -102,6 +105,31 @@ function getWeatherDescription(code) {
 }
 
 /**
+ * Takes a weather code and returns a matching emoji
+ */
+function getWeatherIcon(code) {
+  if (code === 0) return "☀️";
+
+  if ([1, 2, 3].includes(code)) return "⛅";
+
+  if ([45, 48].includes(code)) return "🌫️";
+
+  if ([51, 53, 55, 56, 57].includes(code)) return "🌦️";
+
+  if ([61, 63, 65, 66, 67].includes(code)) return "🌧️";
+
+  if ([71, 73, 75, 77].includes(code)) return "❄️";
+
+  if ([80, 81, 82].includes(code)) return "🌦️";
+
+  if ([85, 86].includes(code)) return "🌨️";
+
+  if ([95, 96, 99].includes(code)) return "⛈️";
+
+  return "❓";
+}
+
+/**
  * Takes a date string and then reformats it
  * returns a new date string showing the weekday, month and day in short "Mon Nov 14"
  */
@@ -147,8 +175,13 @@ function createCurrentWeatherCard(weather) {
   condition.classList.add("current-condition");
   condition.textContent = getWeatherDescription(weather.weatherCode);
 
+  const icon = document.createElement("span");
+  icon.classList.add("weather-icon");
+  icon.setAttribute("aria-hidden", "true");
+  icon.textContent = getWeatherIcon(weather.weatherCode);
+
   text.append(temp, condition);
-  main.append(text); // add the icon here later
+  main.append(text, icon); // add the icon here later
 
   // feels like and wind speed
   const stats = document.createElement("dl");
@@ -212,6 +245,11 @@ function createForecastCards(weather) {
     condition.classList.add("forecast-condition");
     condition.textContent = getWeatherDescription(day.weatherCode);
 
+    const icon = document.createElement("span");
+    icon.classList.add("forecast-icon");
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = getWeatherIcon(day.weatherCode);
+
     const range = document.createElement("p");
     range.classList.add("forecast-range");
 
@@ -220,7 +258,7 @@ function createForecastCards(weather) {
 
     range.append("Low " + day.low + "°C · ", high);
 
-    item.append(time, condition, range); // add the icon between time and condition later
+    item.append(time, icon, condition, range); // add the icon between time and condition later
     list.append(item);
   });
 
@@ -334,17 +372,14 @@ function renderSearchResults(places) {
   resultSection.classList.remove("hidden");
 }
 
-
-
 searchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   //reset some elements on submit
   validationDisplay.innerHTML = "";
+  validationDisplay.classList.remove("error-text", "success-text");
   displayForcastSection.innerHTML = "";
 
   const input = searchInput.value.trim();
-
-  const results = await getSearchResults(input);
 
   // checks that input is not empty.
   if (!input) {
@@ -354,11 +389,28 @@ searchForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  // if results found, show success message.
-  if (results) {
-    validationDisplay.innerHTML = `Found ${results.length} locations for ${input.charAt(0).toUpperCase() + input.slice(1)}. Please select one to view its forecast`;
-    validationDisplay.classList.add("success-text");
+  const results = await getSearchResults(input);
+
+  // if result is null, there might have been an issue with the API.
+  if (results === null) {
+    validationDisplay.textContent =
+      "There was an issue with the service. Check your connection or try again later.";
+    validationDisplay.classList.add("error-text");
+    resultSection.classList.add("hidden");
+    return;
   }
+
+  // if results found, show success message.
+  if (results.length === 0) {
+    validationDisplay.textContent = `No locations found for "${input}". Check the spelling and try again.`;
+    validationDisplay.classList.add("error-text");
+    resultSection.classList.add("hidden");
+    return;
+  }
+
+  // results found
+  validationDisplay.textContent = `Found ${results.length} locations for ${input.charAt(0).toUpperCase() + input.slice(1)}. Please select one to view its forecast`;
+  validationDisplay.classList.add("success-text");
 
   renderSearchResults(results);
   console.log(results);
