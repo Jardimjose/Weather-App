@@ -413,7 +413,8 @@ searchForm.addEventListener("submit", async (event) => {
   validationDisplay.classList.add("success-text");
 
   renderSearchResults(results);
-  console.log(results);
+  
+  //console.log(results);
 
   // test request to berlin
   // console.log(await getWeather(52.52437, 13.41053, "Berlin", "Germany"));
