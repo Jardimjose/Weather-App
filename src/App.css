@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Aether Luminous - Blue Palette */
+  --color-luminous-primary: #0284C7;
+  --color-luminous-secondary: #0EA5E9;
+  --color-luminous-tertiary: #38BDF8;
+  --color-luminous-neutral: #0F172A;
+
+  /* Aether Atmospheric - Teal Palette */
+  --color-atmospheric-primary: #00B4D8;
+  --color-atmospheric-secondary: #0096C7;
+  --color-atmospheric-tertiary: #48CAE4;
+  --color-atmospheric-neutral: #0A0F18;
+}

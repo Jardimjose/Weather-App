@@ -2,52 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
-    <title>City Weather</title>
-    <script src="script.js" defer></script>
+    <title>weather-app</title>
   </head>
   <body>
-    <!-- -->
-    <div class="container">
-      <header class="header">
-        <a class="logo" href="index.html">
-          <img
-            src="assets/logo.svg"
-            alt="City Weather logo"
-            width="32"
-            height="32"
-          />
-          <h1>City Weather</h1>
-        </a>
-        <p>Search a location</p>
-      </header>
-      <!-- Location Search Form-->
-      <main class="main-content">
-        <section class="card search-section">
-          <h2>Search for a city</h2>
-          <p>
-            Enter a location, choose the correct one from the results to view
-            the current weather and forecast.
-          </p>
-          <form id="search-form">
-            <label for="city-search">City Name</label>
-            <input type="text" id="city-search" placeholder="e.g Helsingborg" />
-            <button type="submit">Search</button>
-          </form>
-          <p id="validation-message"></p>
-        </section>
-        <!-- Found Location Results -->
-        <section class="card search-results hidden"></section>
-        <!-- Forecast Display-->
-        <section class="results-display hidden"></section>
-        <!-- Error Messages display.-->
-        <section class="card error-display hidden"></section>
-      </main>
-      <!-- -->
-      <footer class="footer">
-        <p>Weather data provided by Open-Meteo.</p>
-      </footer>
-    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
