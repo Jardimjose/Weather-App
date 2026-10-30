@@ -20,6 +20,7 @@ const Header = () => {
           alt="City Weather logo"
           width="32"
           height="32"
+          className="w-8 h-8 brightness-0 dark:brightness-100 transition-all" /* neex to fix the logo*/ 
         />
         <h1 className="text-lg font-semibold">City Weather</h1>
       </a>
