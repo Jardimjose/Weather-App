@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { getSearchResults, type LocationResult } from "./services/geocoding";
-import { getWeather, type CleanedWeatherData, formatDate, getWeatherDescription } from './services/weather';
+import {
+  getWeather,
+  type CleanedWeatherData,
+  formatDate,
+  getWeatherDescription,
+} from "./services/weather";
 
 import Header from "./components/Header";
 import SearchForm from "./components/SearchForm";
@@ -8,7 +13,6 @@ import RenderResults from "./components/RenderResults";
 import Footer from "./components/Footer";
 import CurrentWeather from "./components/CurrentWeather";
 import WeatherForecast from "./components/WeatherForecast";
-
 
 import "./App.css";
 
@@ -132,7 +136,6 @@ function App() {
                   )}
                   feelsLike={weatherData.feelsLike}
                   windSpeed={weatherData.wind}
-                  windDirection="W" // Optional direction or map wind_direction_10m if added
                 />
               </div>
               <div className="lg:col-span-7">
@@ -140,6 +143,7 @@ function App() {
                   forecastData={weatherData.forecast.map((item) => ({
                     day: formatDate(item.date),
                     description: getWeatherDescription(item.weatherCode),
+                    weatherCode: item.weatherCode,
                     lowTemp: item.low,
                     highTemp: item.high,
                   }))}

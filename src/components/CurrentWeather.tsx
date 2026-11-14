@@ -5,7 +5,6 @@ interface CurrentWeatherProps {
   weatherDescription?: string;
   feelsLike?: number;
   windSpeed?: number;
-  windDirection?: string;
 }
 
 const CurrentWeather: React.FC<CurrentWeatherProps> = ({
@@ -13,7 +12,6 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   weatherDescription = 'Partly cloudy',
   feelsLike = 16,
   windSpeed = 22,
-  windDirection = 'WNW',
 }) => {
   return (
     <section
@@ -76,7 +74,6 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
           </span>
           <p className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mt-1 flex items-baseline gap-1.5">
             {windSpeed} <span className="text-xs font-normal text-slate-500">km/h</span>{' '}
-            {/*<span className="text-xs text-[#0284C7] dark:text-[#00B4D8] font-medium">{windDirection}</span> */}
           </p>
         </div>
       </div>

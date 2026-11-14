@@ -1,24 +1,19 @@
 import React from 'react';
 import ForecastCard from './ForecastCard';
 
-export interface DailyForecast {
+export interface DailyForecastInput {
   day: string;
   description: string;
+  weatherCode: number;
   lowTemp: number;
   highTemp: number;
 }
 
 interface WeatherForecastProps {
-  forecastData?: DailyForecast[];
+  forecastData?: DailyForecastInput[];
 }
 
-const WeatherForecast: React.FC<WeatherForecastProps> = ({
-  forecastData = [
-    { day: 'Mon, Oct 20', description: 'Drizzle', lowTemp: 12, highTemp: 17 },
-    { day: 'Tue, Oct 21', description: 'Partly cloudy', lowTemp: 13, highTemp: 19 },
-    { day: 'Wed, Oct 22', description: 'Rain', lowTemp: 11, highTemp: 16 },
-  ],
-}) => {
+const WeatherForecast: React.FC<WeatherForecastProps> = ({ forecastData = [] }) => {
   return (
     <section
       aria-labelledby="forecast-heading"
@@ -37,13 +32,14 @@ const WeatherForecast: React.FC<WeatherForecastProps> = ({
           </span>
         </div>
 
-        {/* 3-Day Cards Grid (Side-by-side on desktop) */}
+        {/* 3-Day Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {forecastData.map((forecast, index) => (
             <ForecastCard
               key={index}
               day={forecast.day}
               description={forecast.description}
+              weatherCode={forecast.weatherCode}
               lowTemp={forecast.lowTemp}
               highTemp={forecast.highTemp}
             />
