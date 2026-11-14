@@ -15,12 +15,20 @@ const Header = () => {
     <header className="w-full bg-white dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between px-6 py-4 text-slate-900 dark:text-white gap-4 sm:gap-0 transition-colors duration-300">
       {/* Left side: Logo & Title */}
       <a href="#" className="flex items-center gap-3">
-        <img
-          src="./src/assets/logo.svg"
-          alt="City Weather logo"
-          width="32"
-          height="32"
-          className="w-8 h-8 brightness-0 dark:brightness-100 transition-all" /* neex to fix the logo*/ 
+        {/* Logo fixed using mask styling to match dark/light mode colors dynamically */}
+        <div 
+          className="w-8 h-8 bg-slate-900 dark:bg-white transition-colors duration-300"
+          style={{
+            maskImage: `url('./src/assets/logo.svg')`,
+            WebkitMaskImage: `url('./src/assets/logo.svg')`,
+            maskRepeat: 'no-repeat',
+            WebkitMaskRepeat: 'no-repeat',
+            maskPosition: 'center',
+            WebkitMaskPosition: 'center',
+            maskSize: 'contain',
+            WebkitMaskSize: 'contain',
+          }}
+          aria-hidden="true"
         />
         <h1 className="text-lg font-semibold">City Weather</h1>
       </a>
