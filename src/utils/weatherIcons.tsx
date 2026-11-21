@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function getWeatherIcon(code: number, className: string = 'w-5 h-5') {
   // 0: Clear sky (Sun)
   if (code === 0) {
